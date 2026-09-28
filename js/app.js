@@ -346,12 +346,14 @@ function renderHeader() {
   return `
   <header style="position:sticky;top:0;z-index:30;background:#FBF5EA;border-bottom:2px solid #29378A">
     <div style="max-width:1240px;margin:0 auto;padding:10px 20px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px">
-      <button onclick="App.goHome()" style="background:none;border:0;padding:0;display:flex;align-items:center;gap:12px;cursor:pointer">
-        <img src="logo.jpg" alt="Pépins &amp; Trognons" style="width:62px;height:62px;border-radius:50%;display:block;clip-path:circle(47%)">
-      </button>
-      <div style="display:flex;align-items:center;gap:8px;background:#FFFCF6;border:2px solid #29378A;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px">
-        <span style="width:10px;height:10px;border-radius:50%;background:${open.open ? GREEN : '#E9604A'};box-shadow:0 0 0 3px ${open.open ? '#D5EBDD' : '#FCE3DC'}"></span>
-        <span>${esc(open.label)}</span>
+      <div style="display:flex;align-items:center;gap:12px;min-width:0">
+        <button onclick="App.goHome()" style="background:none;border:0;padding:0;display:flex;align-items:center;gap:12px;flex:none;cursor:pointer">
+          <img src="logo.jpg" alt="Pépins &amp; Trognons" style="width:62px;height:62px;border-radius:50%;display:block;clip-path:circle(47%)">
+        </button>
+        <div style="display:flex;align-items:center;gap:8px;background:#FFFCF6;border:2px solid #29378A;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px;min-width:0">
+          <span style="width:10px;height:10px;border-radius:50%;background:${open.open ? GREEN : '#E9604A'};box-shadow:0 0 0 3px ${open.open ? '#D5EBDD' : '#FCE3DC'};flex:none"></span>
+          <span>${esc(open.label)}</span>
+        </div>
       </div>
       <nav style="margin-left:auto;display:flex;flex-wrap:wrap;gap:6px;align-items:center">
         ${navBtn('Accueil', isHome, "App.goHome()")}
