@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Editor/OS cruft
+*.swp
+Thumbs.db
+
+# Env / secrets — none expected in this static mockup, but ignore on principle
+.env
+.env.*
+*.pem
+*.key
+
+# The raw Claude Design export (proprietary runtime + duplicate photos).
+# The site itself is now plain HTML/CSS/JS in index.html, css/, js/ —
+# this folder is kept locally only as a reference, not committed.
+/Formulaire projet logo photos/
+
+# Local notes/scratch, if any
+*.local.md
