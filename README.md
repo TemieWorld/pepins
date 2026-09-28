@@ -40,6 +40,17 @@ RESEARCH.md          Recherche UX/UI qui a précédé le design
 Basculer entre "Simon" et "Christopher" dans l'espace équipe change simplement la signature
 laissée dans l'historique — utile pour montrer la traçabilité pendant une démo.
 
+## Responsive
+
+Le site client (accueil, catalogue, fiche produit, panier, confirmation) est responsive par
+défaut grâce à des grilles CSS qui s'adaptent à la largeur. L'espace équipe a deux points de
+rupture supplémentaires, recalculés en direct au redimensionnement :
+
+- sous 850px, la barre latérale devient une barre horizontale en haut de l'écran (position
+  relative, hauteur automatique) plutôt qu'une colonne fixe sur toute la hauteur ;
+- sous 700px, le tableau de stock devient une liste de cartes empilées, plus lisible et plus
+  facile à toucher au doigt qu'un tableau compressé.
+
 ## Réinitialiser la démo
 
 Bouton "Réinitialiser la démo" dans l'espace équipe, ou effacer la clé `pt-demo-v1` du

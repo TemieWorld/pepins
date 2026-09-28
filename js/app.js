@@ -39,6 +39,11 @@ function loadState() {
 let state = loadState();
 let toastTimer = null;
 
+// Largeur de viewport utilisée pour les points de rupture du dashboard
+// (barre latérale, table de stock en cartes). Fallback large si le code
+// tourne hors navigateur.
+function viewportWidth() { return (typeof window !== 'undefined' && window.innerWidth) || 1200; }
+
 function persist() {
   const { products, resas, log, cart, view, pid, adminTab, user, last, univ, resaTab } = state;
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ products, resas, log, cart, view, pid, adminTab, user, last, univ, resaTab })); } catch (e) {}
@@ -835,19 +840,29 @@ function renderAdmin() {
   else if (state.adminTab === 'resa') tabContent = renderAdminResa(rc);
   else tabContent = renderAdminLog();
 
+  // Sous ~850px, la barre latérale devient une barre horizontale en haut
+  // (position relative, hauteur auto, nav en ligne) plutôt qu'une colonne
+  // fixe sur toute la hauteur de l'écran, pour rester utilisable au doigt.
+  const vw = viewportWidth();
+  const compact = vw < 850;
+  const asideStyle = compact
+    ? 'gap:14px;position:relative;height:auto'
+    : 'gap:22px;position:sticky;height:100vh';
+  const navDir = compact ? 'row' : 'column';
+
   return `
   <div data-screen-label="06 Dashboard" style="display:flex;flex-wrap:wrap;min-height:100vh;align-items:stretch">
-    <aside style="flex:1 1 230px;max-width:100%;background:#29378A;color:#FFFCF6;padding:22px 16px;display:flex;flex-direction:column;gap:22px;position:sticky;top:0;align-self:flex-start;height:100vh;overflow-y:auto">
+    <aside style="flex:1 1 230px;max-width:100%;background:#29378A;color:#FFFCF6;padding:22px 16px;display:flex;flex-direction:column;${asideStyle};top:0;z-index:25;align-self:flex-start;overflow-y:auto">
       <div style="display:flex;align-items:center;gap:12px">
         <img src="logo.jpg" alt="" style="width:52px;height:52px;border-radius:50%;clip-path:circle(47%)">
         <div style="display:flex;flex-direction:column"><strong style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:18px">Espace équipe</strong><span style="font-size:13px;opacity:.85">111 bd Auguste Blanqui</span></div>
       </div>
-      <nav style="display:flex;flex-direction:column;gap:4px">${adminNav}</nav>
+      <nav style="display:flex;flex-direction:${navDir};flex-wrap:wrap;gap:4px">${adminNav}</nav>
       <div style="display:flex;flex-direction:column;gap:8px">
         <div style="font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;opacity:.85">Connecté en tant que</div>
         <div style="display:flex;gap:6px;background:rgba(255,252,246,.12);border-radius:999px;padding:4px">${users}</div>
       </div>
-      <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+      <div style="margin-top:auto;display:flex;flex-direction:${navDir};flex-wrap:wrap;gap:8px">
         <button onclick="App.goHome()" style="background:#FFFCF6;color:#29378A;border:0;border-radius:999px;padding:10px 14px;font-weight:800;font-size:14px;cursor:pointer">← Voir le site</button>
         <button onclick="App.resetDemo()" style="background:none;color:#FFFCF6;border:1px solid rgba(255,252,246,.5);border-radius:999px;padding:8px 14px;font-weight:700;font-size:13px;cursor:pointer">Réinitialiser la démo</button>
       </div>
@@ -964,6 +979,47 @@ function renderAdminStock(counts, statusOf) {
     </div>`;
   }).join('');
 
+  // Sous 700px la table est illisible : chaque produit devient une carte
+  // empilée, avec les 4 chiffres en grille et les boutons d'ajustement
+  // pleine largeur pour rester utilisables au doigt.
+  const cards = state.products.map(x => {
+    const st = ST[statusOf(x)];
+    const u = univOf(x.univ);
+    return `
+    <div style="background:#FFFCF6;border:2px solid #29378A;border-radius:20px;padding:12px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <button onclick="App.editProduct('${x.id}')" style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;text-align:left;background:none;border:0;padding:0;color:#1E2552;cursor:pointer">
+          <img src="${esc(x.img)}" alt="" style="width:46px;height:56px;object-fit:cover;border-radius:10px;flex:none">
+          <span style="display:flex;flex-direction:column;min-width:0"><strong style="font-size:15px;line-height:1.2;color:#29378A">${esc(x.name)}</strong><span style="font-size:13px">${esc(u.name)}</span></span>
+        </button>
+        <span style="padding:4px 10px;border-radius:999px;font-size:13px;font-weight:800;background:${st.bg};color:${st.fg};white-space:nowrap;flex:none">${st.l}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;text-align:center">
+        <span style="background:#F3E8D6;border-radius:12px;padding:6px 4px;display:flex;flex-direction:column"><strong style="font-family:'Fredoka',sans-serif;font-size:20px">${x.stock}</strong><span style="font-size:11px;font-weight:800">En rayon</span></span>
+        <span style="background:#F3E8D6;border-radius:12px;padding:6px 4px;display:flex;flex-direction:column"><strong style="font-family:'Fredoka',sans-serif;font-size:20px">${reserved(x.id)}</strong><span style="font-size:11px;font-weight:800">Réservé</span></span>
+        <span style="background:#F3E8D6;border-radius:12px;padding:6px 4px;display:flex;flex-direction:column"><strong style="font-family:'Fredoka',sans-serif;font-size:20px">${avail(x)}</strong><span style="font-size:11px;font-weight:800">Dispo</span></span>
+        <span style="background:#F3E8D6;border-radius:12px;padding:6px 4px;display:flex;flex-direction:column"><strong style="font-family:'Fredoka',sans-serif;font-size:20px">${x.min}</strong><span style="font-size:11px;font-weight:800">Seuil</span></span>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button onclick="App.adjust('${x.id}', -1)" style="flex:1;height:44px;border-radius:14px;border:2px solid #29378A;background:#FFFCF6;font-weight:800;font-size:16px;color:#29378A;cursor:pointer">−1 Vente</button>
+        <button onclick="App.adjust('${x.id}', 1)" style="flex:1;height:44px;border-radius:14px;border:2px solid #29378A;background:#29378A;font-weight:800;font-size:16px;color:#FFFCF6;cursor:pointer">+1 Réassort</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  const narrow = viewportWidth() < 700;
+  const stockList = narrow
+    ? `<div style="display:flex;flex-direction:column;gap:10px">${cards}</div>`
+    : `
+    <div style="background:#FFFCF6;border:2px solid #29378A;border-radius:22px;overflow-x:auto">
+      <div style="min-width:760px">
+        <div style="display:grid;grid-template-columns:minmax(220px,2.4fr) 1fr 1fr 1fr 1fr 1.1fr 140px;gap:10px;padding:12px 16px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid #29378A">
+          <span>Article</span><span>En rayon</span><span>Réservé</span><span>Dispo</span><span>Seuil bas</span><span>Statut</span><span>Ajuster</span>
+        </div>
+        ${rows}
+      </div>
+    </div>`;
+
   return `
   <div data-screen-label="06 Stock" style="display:flex;flex-direction:column;gap:22px">
     <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px">
@@ -979,14 +1035,7 @@ function renderAdminStock(counts, statusOf) {
       <div style="display:flex;height:18px;border-radius:999px;overflow:hidden;background:#F3E8D6">${barBlocks}</div>
       <div style="display:flex;flex-wrap:wrap;gap:18px;font-size:14px;font-weight:700">${barLegend}</div>
     </div>
-    <div style="background:#FFFCF6;border:2px solid #29378A;border-radius:22px;overflow-x:auto">
-      <div style="min-width:760px">
-        <div style="display:grid;grid-template-columns:minmax(220px,2.4fr) 1fr 1fr 1fr 1fr 1.1fr 140px;gap:10px;padding:12px 16px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-bottom:2px solid #29378A">
-          <span>Article</span><span>En rayon</span><span>Réservé</span><span>Dispo</span><span>Seuil bas</span><span>Statut</span><span>Ajuster</span>
-        </div>
-        ${rows}
-      </div>
-    </div>
+    ${stockList}
     <div style="font-size:14px;line-height:1.5">−1 = vente en boutique, +1 = réassort. Chaque ajustement est signé ${esc(state.user)} dans l'historique. Les articles réservés sont mis de côté : ils restent en rayon mais ne sont plus proposés en ligne.</div>
   </div>`;
 }
@@ -1134,6 +1183,17 @@ function rerenderKeepFocus() {
       try { el.setSelectionRange(restore.start, restore.end); } catch (e) {}
     }
   }
+}
+
+// Re-render on resize so the dashboard's responsive breakpoints
+// (sidebar layout, stock table vs. cards) react live, e.g. when rotating
+// a phone or resizing a browser window.
+let resizeTimer = null;
+if (typeof window !== 'undefined') {
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(rerender, 120);
+  });
 }
 
 doRender();

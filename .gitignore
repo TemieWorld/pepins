@@ -12,10 +12,11 @@ Thumbs.db
 *.pem
 *.key
 
-# The raw Claude Design export (proprietary runtime + duplicate photos).
+# The raw Claude Design exports (proprietary runtime + duplicate photos).
 # The site itself is now plain HTML/CSS/JS in index.html, css/, js/ —
-# this folder is kept locally only as a reference, not committed.
+# these folders are kept locally only as reference, not committed.
 /Formulaire projet logo photos/
+/Formulaire projet logo photos 2/
 
 # Local notes/scratch, if any
 *.local.md
