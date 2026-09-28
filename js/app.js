@@ -350,7 +350,7 @@ function renderHeader() {
         <button onclick="App.goHome()" style="background:none;border:0;padding:0;display:flex;align-items:center;gap:12px;flex:none;cursor:pointer">
           <img src="logo.jpg" alt="Pépins &amp; Trognons" style="width:62px;height:62px;border-radius:50%;display:block;clip-path:circle(47%)">
         </button>
-        <div style="display:flex;align-items:center;gap:8px;background:#FFFCF6;border:2px solid #29378A;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px;min-width:0">
+        <div style="display:flex;align-items:center;gap:8px;background:#FFFCF6;border:2px solid #29378A;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px;flex:none;white-space:nowrap">
           <span style="width:10px;height:10px;border-radius:50%;background:${open.open ? GREEN : '#E9604A'};box-shadow:0 0 0 3px ${open.open ? '#D5EBDD' : '#FCE3DC'};flex:none"></span>
           <span>${esc(open.label)}</span>
         </div>
