@@ -448,7 +448,7 @@ function renderHome() {
     <section style="max-width:1240px;margin:0 auto;padding:48px 20px 64px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:48px;align-items:center">
       <div style="display:flex;flex-direction:column;gap:22px">
         <div style="align-self:flex-start;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#29378A;background:#F3E8D6;border-radius:999px;padding:7px 14px">Boutique éco-responsable · Paris 13e · depuis 2020</div>
-        <h1 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(40px,5.6vw,72px);line-height:1.02;margin:0;color:#29378A;text-wrap:balance">Réservez en ligne, <span style="text-decoration:underline wavy #E9604A;text-decoration-thickness:4px;text-underline-offset:10px">on vous le garde</span> en boutique.</h1>
+        <h1 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(40px,5.6vw,72px);line-height:1.02;margin:0;color:#29378A;text-wrap:balance">Réservez en ligne, <span style="color:#CC4328">on vous le garde</span> en boutique.</h1>
         <p style="font-size:19px;line-height:1.55;margin:0;max-width:34em;text-wrap:pretty">90 marques et 1000 références choisies pour leur transparence, leur savoir-faire et leur durabilité. Réservez vos articles, passez les chercher au 111 bd Auguste Blanqui et payez sur place.</p>
         <div style="display:flex;flex-wrap:wrap;gap:12px">
           <button onclick="App.goCatalogue('all')" class="btn-primary" style="border-radius:999px">Voir le catalogue</button>
