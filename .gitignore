@@ -20,3 +20,8 @@ Thumbs.db
 
 # Local notes/scratch, if any
 *.local.md
+
+# Internal planning docs — not meant for the client to browse on GitHub.
+# Kept locally only, never pushed.
+/RESEARCH.md
+/FLYER-PROMPT.md
