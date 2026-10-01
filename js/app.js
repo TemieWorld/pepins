@@ -389,9 +389,9 @@ function renderFooter() {
 function renderModeSwitcher() {
   const isAdmin = state.view === 'admin';
   return `
-  <div style="position:fixed;right:16px;bottom:16px;z-index:50;display:flex;gap:4px;background:#1E2552;border-radius:999px;padding:4px;box-shadow:0 8px 24px rgba(30,37,82,.3)">
-    <button onclick="App.goHome()" style="border:0;border-radius:999px;padding:8px 14px;font-weight:800;font-size:13px;background:${isAdmin ? 'transparent' : '#FFFCF6'};color:${isAdmin ? '#FFFCF6' : '#1E2552'};cursor:pointer">Site client</button>
-    <button onclick="App.goAdmin()" style="border:0;border-radius:999px;padding:8px 14px;font-weight:800;font-size:13px;background:${isAdmin ? '#FFFCF6' : 'transparent'};color:${isAdmin ? '#1E2552' : '#FFFCF6'};cursor:pointer">Espace équipe</button>
+  <div style="position:fixed;right:clamp(8px,3vw,16px);bottom:clamp(8px,3vw,16px);z-index:50;display:flex;gap:4px;background:#1E2552;border-radius:999px;padding:3px;box-shadow:0 8px 24px rgba(30,37,82,.3)">
+    <button onclick="App.goHome()" style="border:0;border-radius:999px;padding:clamp(6px,2vw,8px) clamp(10px,3vw,14px);font-weight:800;font-size:clamp(11px,3vw,13px);white-space:nowrap;background:${isAdmin ? 'transparent' : '#FFFCF6'};color:${isAdmin ? '#FFFCF6' : '#1E2552'};cursor:pointer">Site client</button>
+    <button onclick="App.goAdmin()" style="border:0;border-radius:999px;padding:clamp(6px,2vw,8px) clamp(10px,3vw,14px);font-weight:800;font-size:clamp(11px,3vw,13px);white-space:nowrap;background:${isAdmin ? '#FFFCF6' : 'transparent'};color:${isAdmin ? '#1E2552' : '#FFFCF6'};cursor:pointer">Espace équipe</button>
   </div>`;
 }
 
@@ -447,8 +447,8 @@ function renderHome() {
 
   return `
   <main data-screen-label="01 Accueil">
-    <section style="max-width:1240px;margin:0 auto;padding:48px 20px 64px;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:48px;align-items:center">
-      <div style="display:flex;flex-direction:column;gap:22px">
+    <section style="max-width:1240px;margin:0 auto;padding:clamp(24px,8vw,48px) 20px clamp(28px,8vw,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:clamp(24px,6vw,48px);align-items:center">
+      <div style="display:flex;flex-direction:column;gap:clamp(14px,4vw,22px)">
         <div style="align-self:flex-start;font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#29378A;background:#F3E8D6;border-radius:999px;padding:7px 14px">Boutique éco-responsable · Paris 13e · depuis 2020</div>
         <h1 style="font-family:'Fredoka',sans-serif;font-weight:600;font-size:clamp(40px,5.6vw,72px);line-height:1.02;margin:0;color:#29378A;text-wrap:balance">Réservez en ligne, <span style="color:#CC4328">on vous le garde</span> en boutique.</h1>
         <p style="font-size:19px;line-height:1.55;margin:0;max-width:34em;text-wrap:pretty">90 marques et 1000 références choisies pour leur transparence, leur savoir-faire et leur durabilité. Réservez vos articles, passez les chercher au 111 bd Auguste Blanqui et payez sur place.</p>
